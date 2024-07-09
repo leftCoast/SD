@@ -454,7 +454,7 @@ namespace SDLib {
        error.
 
     */
-
+    
     int pathidx = 0;
 
     // do the interactive search
@@ -524,7 +524,13 @@ namespace SDLib {
     }
   */
 
-
+  /*
+    If you want to see it, here it is.
+  */
+  int SDClass::getOpenMode(void) {return fileOpenMode; }
+    
+    
+    
   //bool SDClass::close() {
   //  /*
   //

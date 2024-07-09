@@ -26,7 +26,7 @@
 namespace SDLib {
 
   class File : public Stream {
-    private:
+    protected:
       char _name[13]; // our name
       SdFile *_file;  // underlying file pointer
 
@@ -48,16 +48,16 @@ namespace SDLib {
       operator bool();
       char * name();
 
-      bool isDirectory(void);
-      File openNextFile(uint8_t mode = O_RDONLY);
-      void rewindDirectory(void);
+      bool    isDirectory(void);
+      virtual File openNextFile(uint8_t mode = O_RDONLY);
+      void    rewindDirectory(void);
 
       using Print::write;
   };
 
   class SDClass {
 
-    private:
+    protected:
       // These are required for initialisation and use of sdfatlib
       Sd2Card card;
       SdVolume volume;
@@ -77,11 +77,13 @@ namespace SDLib {
       // Open the specified file/directory with the supplied mode (e.g. read or
       // write, etc). Returns a File object for interacting with the file.
       // Note that currently only one file can be open at a time.
-      File open(const char *filename, uint8_t mode = FILE_READ);
-      File open(const String &filename, uint8_t mode = FILE_READ) {
+      virtual File open(const char *filename, uint8_t mode = FILE_READ);
+   	File open(const String &filename, uint8_t mode = FILE_READ) {
         return open(filename.c_str(), mode);
       }
-
+      
+		int getOpenMode(void);
+		
       // Methods to determine if the requested file path exists.
       bool exists(const char *filepath);
       bool exists(const String &filepath) {
@@ -114,6 +116,7 @@ namespace SDLib {
       // it's probably not the best place for it.
       // It shouldn't be set directly--it is set via the parameters to `open`.
       int fileOpenMode;
+      
 
       friend class File;
       friend bool callback_openPath(SdFile&, const char *, bool, void *);
